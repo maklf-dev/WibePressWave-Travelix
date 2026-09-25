@@ -36,7 +36,7 @@ function travelix_flex_settings_schema() {
 		'left'   => __( 'چپ', 'travelix-flex' ),
 	);
 
-	return array(
+	$schema = array(
 		'general' => array(
 			'label'    => __( 'طراحی عمومی', 'travelix-flex' ),
 			'sections' => array(
@@ -123,7 +123,7 @@ function travelix_flex_settings_schema() {
 						array( 'key' => 'hero_secondary_label', 'label' => __( 'متن دکمه دوم', 'travelix-flex' ), 'type' => 'text', 'default' => 'دریافت مشاوره', 'translate' => true ),
 						array( 'key' => 'hero_secondary_url', 'label' => __( 'لینک دکمه دوم', 'travelix-flex' ), 'type' => 'url', 'default' => '#travel-request' ),
 						array( 'key' => 'hero_signature', 'label' => __( 'متن تزئینی', 'travelix-flex' ), 'type' => 'text', 'default' => 'بیشتر سفر کن، بهتر زندگی کن', 'translate' => true ),
-						array( 'key' => 'hero_image', 'label' => __( 'تصویر پس‌زمینه', 'travelix-flex' ), 'type' => 'media', 'default' => 'https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=2200&q=86' ),
+						array( 'key' => 'hero_image', 'label' => __( 'تصویر پس‌زمینه', 'travelix-flex' ), 'type' => 'media', 'default' => TRAVELIX_FLEX_URI . '/assets/images/demo-hero.svg' ),
 						array( 'key' => 'hero_overlay', 'label' => __( 'شدت لایه تیره (۰ تا ۹۵)', 'travelix-flex' ), 'type' => 'number', 'default' => 72, 'min' => 0, 'max' => 95 ),
 						array( 'key' => 'hero_align', 'label' => __( 'چیدمان متن', 'travelix-flex' ), 'type' => 'select', 'default' => 'right', 'choices' => $alignments ),
 						array( 'key' => 'hero_title_size', 'label' => __( 'اندازه عنوان دسکتاپ (px)', 'travelix-flex' ), 'type' => 'number', 'default' => 72, 'min' => 36, 'max' => 120 ),
@@ -174,8 +174,8 @@ function travelix_flex_settings_schema() {
 					'fields' => array_merge(
 						travelix_flex_section_heading_fields( 'about', 50, 'چرا Travelix', 'فراتر از یک رزرو ساده', 'تجربه محلی، انتخاب‌های مطمئن و پشتیبانی انسانی را کنار هم می‌گذاریم تا سفر برای شما ساده‌تر شود.' ),
 						array(
-							array( 'key' => 'about_main_image', 'label' => __( 'تصویر بزرگ', 'travelix-flex' ), 'type' => 'media', 'default' => 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=84' ),
-							array( 'key' => 'about_small_image', 'label' => __( 'تصویر کوچک', 'travelix-flex' ), 'type' => 'media', 'default' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=84' ),
+							array( 'key' => 'about_main_image', 'label' => __( 'تصویر بزرگ', 'travelix-flex' ), 'type' => 'media', 'default' => TRAVELIX_FLEX_URI . '/assets/images/demo-about.svg' ),
+							array( 'key' => 'about_small_image', 'label' => __( 'تصویر کوچک', 'travelix-flex' ), 'type' => 'media', 'default' => TRAVELIX_FLEX_URI . '/assets/images/demo-destination.svg' ),
 						),
 						travelix_flex_repeater_fields( 'about', 4, $icons, array(
 							array( 'icon' => 'compass', 'title' => 'تجربه‌های منتخب', 'text' => 'انتخاب‌شده با دقت' ),
@@ -253,7 +253,7 @@ function travelix_flex_settings_schema() {
 						array(
 							array( 'key' => 'cta_button_label', 'label' => __( 'متن دکمه', 'travelix-flex' ), 'type' => 'text', 'default' => 'درخواست مشاوره رایگان', 'translate' => true ),
 							array( 'key' => 'cta_button_url', 'label' => __( 'لینک دکمه', 'travelix-flex' ), 'type' => 'url', 'default' => '#travel-request' ),
-							array( 'key' => 'cta_image', 'label' => __( 'تصویر پس‌زمینه', 'travelix-flex' ), 'type' => 'media', 'default' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=84' ),
+							array( 'key' => 'cta_image', 'label' => __( 'تصویر پس‌زمینه', 'travelix-flex' ), 'type' => 'media', 'default' => TRAVELIX_FLEX_URI . '/assets/images/demo-cta.svg' ),
 							array( 'key' => 'cta_background', 'label' => __( 'رنگ پایه', 'travelix-flex' ), 'type' => 'color', 'default' => '#18284d' ),
 						),
 						travelix_flex_section_spacing_fields( 'cta', 0, 104 )
@@ -395,6 +395,70 @@ function travelix_flex_settings_schema() {
 					),
 				),
 			),
+		),
+	);
+
+	foreach ( travelix_flex_custom_code_sections() as $section_key => $section_label ) {
+		if ( isset( $schema['homepage']['sections'][ $section_key ] ) ) {
+			$schema['homepage']['sections'][ $section_key ]['fields'] = array_merge(
+				$schema['homepage']['sections'][ $section_key ]['fields'],
+				travelix_flex_section_code_fields( $section_key, $section_label )
+			);
+		}
+	}
+
+	$schema['custom_code'] = array(
+		'label'       => __( 'کدهای اختصاصی', 'travelix-flex' ),
+		'description' => __( 'نمای یکپارچه کدهای CSS و JavaScript تمام بخش‌های صفحه اصلی.', 'travelix-flex' ),
+		'sections'    => array(),
+	);
+
+	return $schema;
+}
+
+/**
+ * Homepage sections that support scoped custom code.
+ *
+ * @return array
+ */
+function travelix_flex_custom_code_sections() {
+	return array(
+		'hero'         => __( '۱. هیرو', 'travelix-flex' ),
+		'lead_form'    => __( '۲. فرم درخواست و تماس', 'travelix-flex' ),
+		'trust'        => __( '۳. مزیت‌ها و آیکن‌ها', 'travelix-flex' ),
+		'destinations' => __( '۴. مقصدها', 'travelix-flex' ),
+		'about'        => __( '۵. معرفی و ویژگی‌ها', 'travelix-flex' ),
+		'process'      => __( '۶. مراحل کار', 'travelix-flex' ),
+		'booking'      => __( '۷. رزرو آنلاین', 'travelix-flex' ),
+		'tours'        => __( '۸. تورها', 'travelix-flex' ),
+		'testimonials' => __( '۹. نظرات مسافران', 'travelix-flex' ),
+		'blog'         => __( '۱۰. مجله سفر', 'travelix-flex' ),
+		'cta'          => __( '۱۱. دعوت نهایی', 'travelix-flex' ),
+	);
+}
+
+/**
+ * CSS and JavaScript editors appended to one homepage section.
+ *
+ * @param string $prefix Section option prefix.
+ * @param string $label  Human-readable section label.
+ * @return array
+ */
+function travelix_flex_section_code_fields( $prefix, $label ) {
+	return array(
+		array(
+			'key'         => $prefix . '_custom_css',
+			'label'       => sprintf( __( 'CSS اختصاصی — %s', 'travelix-flex' ), $label ),
+			'type'        => 'code_css',
+			'default'     => '',
+			'description' => __( 'بدون تگ style وارد کنید. کد تمام بخش‌ها در یک فایل inline امن و تجمیعی بارگذاری می‌شود.', 'travelix-flex' ),
+		),
+		array(
+			'key'         => $prefix . '_custom_js',
+			'label'       => sprintf( __( 'JavaScript اختصاصی — %s', 'travelix-flex' ), $label ),
+			'type'        => 'code_js',
+			'default'     => '',
+			'description' => __( 'بدون تگ script وارد کنید. کد بعد از آماده‌شدن DOM و در محدوده تابع مستقل اجرا می‌شود.', 'travelix-flex' ),
 		),
 	);
 }

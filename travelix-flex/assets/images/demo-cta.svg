@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+  <title id="title">Tropical travel illustration</title><desc id="desc">A tropical shore beneath a warm evening sky.</desc>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#ff9bbd"/><stop offset=".55" stop-color="#f9b07b"/><stop offset="1" stop-color="#534f82"/></linearGradient><linearGradient id="sea" x2="0" y2="1"><stop stop-color="#2d779c"/><stop offset="1" stop-color="#18284d"/></linearGradient></defs>
+  <rect width="1600" height="720" fill="url(#sky)"/><circle cx="1250" cy="185" r="92" fill="#ffe8b2" opacity=".9"/>
+  <path d="M0 420c260-65 420 30 690 0s520-5 910 55v245H0Z" fill="url(#sea)"/>
+  <path d="M0 575c300-75 510 35 760 5s505-15 840 45v95H0Z" fill="#ead4ad"/>
+  <g fill="#10172d"><path d="m225 580 80-330 24 5-55 330Z"/><path d="M310 275c-90-75-150-80-200-45 75 2 125 35 170 85ZM314 278c85-85 155-90 215-45-82 0-145 35-190 90ZM305 270c-25-90-3-150 37-190 5 72-3 125-20 190Z"/></g>
+</svg>

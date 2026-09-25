@@ -39,6 +39,8 @@ add_action( 'admin_menu', 'travelix_flex_add_settings_page' );
 function travelix_flex_sanitize_options( $input ) {
 	$input     = is_array( $input ) ? $input : array();
 	$sanitized = array();
+	$existing  = get_option( 'travelix_flex_options', array() );
+	$existing  = is_array( $existing ) ? $existing : array();
 
 	foreach ( travelix_flex_all_fields() as $key => $field ) {
 		$value = isset( $input[ $key ] ) ? $input[ $key ] : '';
@@ -75,13 +77,23 @@ function travelix_flex_sanitize_options( $input ) {
 			case 'shortcode':
 				$sanitized[ $key ] = sanitize_text_field( $value );
 				break;
+			case 'code_css':
+			case 'code_js':
+				if ( current_user_can( 'unfiltered_html' ) ) {
+					$sanitized[ $key ] = travelix_flex_sanitize_custom_code( $value, 'code_css' === $field['type'] ? 'css' : 'js' );
+				} else {
+					$sanitized[ $key ] = isset( $existing[ $key ] ) ? (string) $existing[ $key ] : '';
+				}
+				break;
 			default:
 				$sanitized[ $key ] = sanitize_text_field( $value );
 		}
 	}
 
 	travelix_flex_register_wpml_strings( $sanitized );
-	add_settings_error( 'travelix_flex_messages', 'travelix_flex_saved', __( 'تنظیمات با موفقیت و به‌صورت امن ذخیره شد.', 'travelix-flex' ), 'updated' );
+	if ( is_admin() && function_exists( 'add_settings_error' ) ) {
+		add_settings_error( 'travelix_flex_messages', 'travelix_flex_saved', __( 'تنظیمات با موفقیت و به‌صورت امن ذخیره شد.', 'travelix-flex' ), 'updated' );
+	}
 	return $sanitized;
 }
 
@@ -120,65 +132,126 @@ function travelix_flex_render_settings_page() {
 	?>
 	<div class="wrap travelix-admin">
 		<div class="travelix-admin__hero">
-			<div><span class="travelix-admin__kicker">Travelix Flex 3.0</span><h1><?php esc_html_e( 'مرکز کنترل قالب', 'travelix-flex' ); ?></h1><p><?php esc_html_e( 'محتوا، طراحی، اتصال افزونه‌ها و رفتار ریسپانسیو صفحه اصلی را بدون ویرایش کد مدیریت کنید.', 'travelix-flex' ); ?></p></div>
+			<div><span class="travelix-admin__kicker">Travelix Flex <?php echo esc_html( TRAVELIX_FLEX_VERSION ); ?></span><h1><?php esc_html_e( 'مرکز کنترل قالب', 'travelix-flex' ); ?></h1><p><?php esc_html_e( 'محتوا، طراحی، اتصال افزونه‌ها و رفتار ریسپانسیو را با پیش‌نمایش زنده و بدون رفرش مدیریت کنید.', 'travelix-flex' ); ?></p></div>
 			<a class="button button-secondary" href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'مشاهده سایت', 'travelix-flex' ); ?></a>
 		</div>
 
 		<?php settings_errors( 'travelix_flex_messages' ); ?>
 		<?php travelix_flex_render_integration_status(); ?>
 
-		<form method="post" action="options.php" class="travelix-settings-form">
+		<form method="post" action="options.php" class="travelix-settings-form" data-travelix-settings>
 			<?php settings_fields( 'travelix_flex_settings_group' ); ?>
-			<nav class="travelix-tabs" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'travelix-flex' ); ?>">
+			<nav class="travelix-tabs" role="tablist" aria-label="<?php esc_attr_e( 'بخش‌های تنظیمات', 'travelix-flex' ); ?>">
 				<?php $first = true; foreach ( $schema as $tab_key => $tab ) : ?>
-					<button type="button" class="travelix-tab<?php echo $first ? ' is-active' : ''; ?>" data-tab="<?php echo esc_attr( $tab_key ); ?>"><?php echo esc_html( $tab['label'] ); ?></button>
+					<button type="button" role="tab" aria-selected="<?php echo $first ? 'true' : 'false'; ?>" class="travelix-tab<?php echo $first ? ' is-active' : ''; ?>" data-tab="<?php echo esc_attr( $tab_key ); ?>"><?php echo esc_html( $tab['label'] ); ?></button>
 				<?php $first = false; endforeach; ?>
 			</nav>
 
-			<div class="travelix-panels">
-				<?php $first = true; foreach ( $schema as $tab_key => $tab ) : ?>
-					<div class="travelix-panel<?php echo $first ? ' is-active' : ''; ?>" data-panel="<?php echo esc_attr( $tab_key ); ?>">
-						<?php foreach ( $tab['sections'] as $section ) : ?>
-							<section class="travelix-settings-card">
-								<div class="travelix-settings-card__head"><h2><?php echo esc_html( $section['title'] ); ?></h2><?php if ( ! empty( $section['description'] ) ) : ?><p><?php echo esc_html( $section['description'] ); ?></p><?php endif; ?></div>
-								<div class="travelix-fields">
-									<?php foreach ( $section['fields'] as $field ) : travelix_flex_render_admin_field( $field, $options[ $field['key'] ] ); endforeach; ?>
-								</div>
-							</section>
-						<?php endforeach; ?>
-					</div>
-				<?php $first = false; endforeach; ?>
+			<div class="travelix-workspace">
+				<div class="travelix-panels">
+					<?php $first = true; foreach ( $schema as $tab_key => $tab ) : ?>
+						<div class="travelix-panel<?php echo $first ? ' is-active' : ''; ?>" role="tabpanel" data-panel="<?php echo esc_attr( $tab_key ); ?>">
+							<?php if ( 'custom_code' === $tab_key ) : ?>
+								<?php travelix_flex_render_code_center( $options ); ?>
+							<?php else : ?>
+								<?php $section_first = true; foreach ( $tab['sections'] as $section_key => $section ) : ?>
+									<section class="travelix-settings-card<?php echo $section_first ? ' is-open' : ''; ?>" data-section="<?php echo esc_attr( $section_key ); ?>" data-tab-section="<?php echo esc_attr( $tab_key . ':' . $section_key ); ?>">
+										<button class="travelix-settings-card__toggle" type="button" aria-expanded="<?php echo $section_first ? 'true' : 'false'; ?>" aria-controls="travelix-section-<?php echo esc_attr( $tab_key . '-' . $section_key ); ?>">
+											<span><strong><?php echo esc_html( $section['title'] ); ?></strong><?php if ( ! empty( $section['description'] ) ) : ?><small><?php echo esc_html( $section['description'] ); ?></small><?php endif; ?></span>
+											<span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span>
+										</button>
+										<div class="travelix-settings-card__body" id="travelix-section-<?php echo esc_attr( $tab_key . '-' . $section_key ); ?>" <?php echo $section_first ? '' : 'hidden'; ?>>
+											<div class="travelix-fields">
+												<?php foreach ( $section['fields'] as $field ) : travelix_flex_render_admin_field( $field, $options[ $field['key'] ] ); endforeach; ?>
+											</div>
+										</div>
+									</section>
+								<?php $section_first = false; endforeach; ?>
+							<?php endif; ?>
+						</div>
+					<?php $first = false; endforeach; ?>
+				</div>
+				<?php travelix_flex_render_live_preview(); ?>
 			</div>
-			<div class="travelix-savebar"><span><?php esc_html_e( 'پس از ذخیره، کش سایت و افزونه کش را پاک کنید.', 'travelix-flex' ); ?></span><?php submit_button( __( 'ذخیره تنظیمات', 'travelix-flex' ), 'primary', 'submit', false ); ?></div>
+			<div class="travelix-savebar"><span data-save-status><?php esc_html_e( 'تغییرات ذخیره‌شده‌اند.', 'travelix-flex' ); ?></span><?php submit_button( __( 'ذخیره تنظیمات', 'travelix-flex' ), 'primary', 'submit', false ); ?></div>
 		</form>
 	</div>
 	<?php
 }
 
-function travelix_flex_render_admin_field( $field, $value ) {
+function travelix_flex_render_admin_field( $field, $value, $mirror = false ) {
 	$key         = $field['key'];
-	$name        = 'travelix_flex_options[' . $key . ']';
+	$name        = $mirror ? '' : 'travelix_flex_options[' . $key . ']';
+	$id          = $mirror ? 'travelix-mirror-' . $key : 'travelix-' . $key;
 	$description = isset( $field['description'] ) ? $field['description'] : '';
+	$is_code     = in_array( $field['type'], array( 'code_css', 'code_js' ), true );
+	$data_attrs  = ' data-setting-key="' . esc_attr( $key ) . '"';
+	if ( $is_code ) {
+		$data_attrs .= ' data-code-key="' . esc_attr( $key ) . '" data-code-role="' . ( $mirror ? 'mirror' : 'source' ) . '"';
+	}
 	?>
-	<div class="travelix-field travelix-field--<?php echo esc_attr( $field['type'] ); ?>">
-		<label for="travelix-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+	<div class="travelix-field travelix-field--<?php echo esc_attr( $field['type'] ); ?><?php echo $mirror ? ' is-mirror' : ''; ?>">
+		<label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $field['label'] ); ?><?php if ( $is_code ) : ?><span class="travelix-code-badge"><?php echo 'code_css' === $field['type'] ? 'CSS' : 'JS'; ?></span><?php endif; ?></label>
 		<div class="travelix-field__control">
 			<?php if ( 'checkbox' === $field['type'] ) : ?>
-				<label class="travelix-switch"><input id="travelix-<?php echo esc_attr( $key ); ?>" type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( $value, 1 ); ?>><span aria-hidden="true"></span></label>
+				<label class="travelix-switch"><input id="<?php echo esc_attr( $id ); ?>" type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php checked( $value, 1 ); ?>><span aria-hidden="true"></span></label>
 			<?php elseif ( 'textarea' === $field['type'] ) : ?>
-				<textarea id="travelix-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="4"><?php echo esc_textarea( $value ); ?></textarea>
+				<textarea id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="4"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_textarea( $value ); ?></textarea>
+			<?php elseif ( $is_code ) : ?>
+				<textarea class="travelix-code-editor" id="<?php echo esc_attr( $id ); ?>" <?php if ( $name ) : ?>name="<?php echo esc_attr( $name ); ?>"<?php endif; ?> rows="10" spellcheck="false"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_textarea( $value ); ?></textarea>
 			<?php elseif ( 'select' === $field['type'] ) : ?>
-				<select id="travelix-<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>"><?php foreach ( $field['choices'] as $choice_value => $choice_label ) : ?><option value="<?php echo esc_attr( $choice_value ); ?>" <?php selected( $value, $choice_value ); ?>><?php echo esc_html( $choice_label ); ?></option><?php endforeach; ?></select>
+				<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php foreach ( $field['choices'] as $choice_value => $choice_label ) : ?><option value="<?php echo esc_attr( $choice_value ); ?>" <?php selected( $value, $choice_value ); ?>><?php echo esc_html( $choice_label ); ?></option><?php endforeach; ?></select>
 			<?php elseif ( 'media' === $field['type'] ) : ?>
-				<div class="travelix-media-field"><input id="travelix-<?php echo esc_attr( $key ); ?>" type="url" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"><button type="button" class="button travelix-media-button"><?php esc_html_e( 'انتخاب تصویر', 'travelix-flex' ); ?></button><button type="button" class="button-link-delete travelix-media-clear"><?php esc_html_e( 'پاک‌کردن', 'travelix-flex' ); ?></button></div><img class="travelix-media-preview<?php echo $value ? '' : ' is-empty'; ?>" src="<?php echo esc_url( $value ); ?>" alt="">
+				<div class="travelix-media-field"><input id="<?php echo esc_attr( $id ); ?>" type="url" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><button type="button" class="button travelix-media-button"><?php esc_html_e( 'انتخاب تصویر', 'travelix-flex' ); ?></button><button type="button" class="button-link-delete travelix-media-clear"><?php esc_html_e( 'پاک‌کردن', 'travelix-flex' ); ?></button></div><img class="travelix-media-preview<?php echo $value ? '' : ' is-empty'; ?>" src="<?php echo esc_url( $value ); ?>" alt="">
 			<?php elseif ( 'color' === $field['type'] ) : ?>
-				<input class="travelix-color" id="travelix-<?php echo esc_attr( $key ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" data-default-color="<?php echo esc_attr( $field['default'] ); ?>">
+				<input class="travelix-color" id="<?php echo esc_attr( $id ); ?>" type="text" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" data-default-color="<?php echo esc_attr( $field['default'] ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php else : ?>
-				<input id="travelix-<?php echo esc_attr( $key ); ?>" type="<?php echo 'number' === $field['type'] ? 'number' : ( 'email' === $field['type'] ? 'email' : ( 'url' === $field['type'] ? 'text' : 'text' ) ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php if ( isset( $field['min'] ) ) : ?>min="<?php echo esc_attr( $field['min'] ); ?>"<?php endif; ?> <?php if ( isset( $field['max'] ) ) : ?>max="<?php echo esc_attr( $field['max'] ); ?>"<?php endif; ?> <?php if ( isset( $field['step'] ) ) : ?>step="<?php echo esc_attr( $field['step'] ); ?>"<?php endif; ?>>
+				<input id="<?php echo esc_attr( $id ); ?>" type="<?php echo 'number' === $field['type'] ? 'number' : ( 'email' === $field['type'] ? 'email' : ( 'url' === $field['type'] ? 'text' : 'text' ) ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>"<?php echo $data_attrs; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> <?php if ( isset( $field['min'] ) ) : ?>min="<?php echo esc_attr( $field['min'] ); ?>"<?php endif; ?> <?php if ( isset( $field['max'] ) ) : ?>max="<?php echo esc_attr( $field['max'] ); ?>"<?php endif; ?> <?php if ( isset( $field['step'] ) ) : ?>step="<?php echo esc_attr( $field['step'] ); ?>"<?php endif; ?>>
 			<?php endif; ?>
 			<?php if ( $description ) : ?><p class="description"><?php echo esc_html( $description ); ?></p><?php endif; ?>
 		</div>
 	</div>
+	<?php
+}
+
+/**
+ * Dedicated synchronized code center. Mirror editors never submit duplicate names.
+ *
+ * @param array $options Saved theme options.
+ */
+function travelix_flex_render_code_center( $options ) {
+	?>
+	<div class="travelix-code-intro">
+		<h2><?php esc_html_e( 'مرکز کدهای اختصاصی صفحه اصلی', 'travelix-flex' ); ?></h2>
+		<p><?php esc_html_e( 'هر ویرایشگر با باکس همان بخش در تب «محتوای صفحه اصلی» همگام است. در خروجی سایت، همه CSSها در یک style و همه JavaScriptها در یک script تجمیع می‌شوند.', 'travelix-flex' ); ?></p>
+		<?php if ( ! current_user_can( 'unfiltered_html' ) ) : ?><div class="notice notice-warning inline"><p><?php esc_html_e( 'حساب شما اجازه unfiltered_html ندارد؛ برای امنیت، کدهای سفارشی ذخیره نخواهند شد.', 'travelix-flex' ); ?></p></div><?php endif; ?>
+	</div>
+	<?php $first = true; foreach ( travelix_flex_custom_code_sections() as $section_key => $section_label ) : ?>
+		<?php
+		$fields = travelix_flex_section_code_fields( $section_key, $section_label );
+		$has_code = ! empty( $options[ $section_key . '_custom_css' ] ) || ! empty( $options[ $section_key . '_custom_js' ] );
+		$is_open  = $first || $has_code;
+		?>
+		<section class="travelix-settings-card travelix-code-card<?php echo $is_open ? ' is-open' : ''; ?>" data-section="<?php echo esc_attr( $section_key ); ?>" data-tab-section="custom_code:<?php echo esc_attr( $section_key ); ?>">
+			<button class="travelix-settings-card__toggle" type="button" aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>" aria-controls="travelix-code-<?php echo esc_attr( $section_key ); ?>"><span><strong><?php echo esc_html( $section_label ); ?></strong><small><?php echo $has_code ? esc_html__( 'دارای کد ذخیره‌شده', 'travelix-flex' ) : esc_html__( 'بدون کد اختصاصی', 'travelix-flex' ); ?></small></span><span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span></button>
+			<div class="travelix-settings-card__body" id="travelix-code-<?php echo esc_attr( $section_key ); ?>" <?php echo $is_open ? '' : 'hidden'; ?>><div class="travelix-fields travelix-fields--code">
+				<?php foreach ( $fields as $field ) : travelix_flex_render_admin_field( $field, $options[ $field['key'] ], true ); endforeach; ?>
+			</div></div>
+		</section>
+	<?php $first = false; endforeach; ?>
+	<?php
+}
+
+/**
+ * Sticky live-preview shell populated by admin.js.
+ */
+function travelix_flex_render_live_preview() {
+	?>
+	<aside class="travelix-live-preview" data-live-preview>
+		<div class="travelix-live-preview__head"><span><i aria-hidden="true"></i><?php esc_html_e( 'پیش‌نمایش زنده', 'travelix-flex' ); ?></span><strong data-preview-title><?php esc_html_e( 'طراحی عمومی', 'travelix-flex' ); ?></strong></div>
+		<div class="travelix-preview-stage" data-preview-stage aria-live="polite"></div>
+		<p class="travelix-live-preview__note"><?php esc_html_e( 'پیش‌نمایش، نمونه‌ای فشرده از بخش فعال است؛ تغییرات فرم بلافاصله نمایش داده می‌شوند. کد JavaScript فقط پس از ذخیره در سایت اجرا می‌شود.', 'travelix-flex' ); ?></p>
+	</aside>
 	<?php
 }
 

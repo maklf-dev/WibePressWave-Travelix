@@ -21,12 +21,15 @@ function travelix_flex_dynamic_css() {
 		'tahoma'    => 'Tahoma, Arial, sans-serif',
 		'system'    => '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
 	);
-	$shadow = $shadow_map[ travelix_flex_option( 'card_shadow' ) ];
-	$font   = $font_map[ travelix_flex_option( 'font_family' ) ];
+	$shadow_key = (string) travelix_flex_option( 'card_shadow' );
+	$font_key   = (string) travelix_flex_option( 'font_family' );
+	$shadow     = isset( $shadow_map[ $shadow_key ] ) ? $shadow_map[ $shadow_key ] : $shadow_map['medium'];
+	$font       = isset( $font_map[ $font_key ] ) ? $font_map[ $font_key ] : $font_map['system'];
 	$align_map = is_rtl()
 		? array( 'right' => 'flex-start', 'center' => 'center', 'left' => 'flex-end' )
 		: array( 'right' => 'flex-end', 'center' => 'center', 'left' => 'flex-start' );
-	$hero_action_alignment = $align_map[ travelix_flex_option( 'hero_align' ) ];
+	$hero_align            = (string) travelix_flex_option( 'hero_align' );
+	$hero_action_alignment = isset( $align_map[ $hero_align ] ) ? $align_map[ $hero_align ] : $align_map['right'];
 
 	$css = ':root{'
 		. '--tx-primary:' . travelix_flex_option( 'color_primary' ) . ';'

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Coastal destination illustration</title><desc id="desc">White travel houses above a blue coastal bay.</desc>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#8fd6ef"/><stop offset="1" stop-color="#d9f0f5"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#3bb9dc"/><stop offset="1" stop-color="#245a94"/></linearGradient></defs>
+  <rect width="1000" height="1200" fill="url(#sky)"/><circle cx="760" cy="190" r="82" fill="#fff4c9"/>
+  <path d="M0 610c180-130 310-150 500-70s310 45 500-60v720H0Z" fill="url(#water)"/>
+  <path d="M0 650 240 390l170 110 175-190 210 170 205-80v420c-170-70-320-5-500-40S210 700 0 820Z" fill="#c5aa8a"/>
+  <g fill="#fff"><path d="M105 515h150v155H105z"/><path d="m90 515 90-80 90 80Z"/><path d="M290 540h180v170H290z"/><path d="m275 540 105-95 105 95Z"/><path d="M520 515h150v180H520z"/><path d="m505 515 90-86 90 86Z"/></g>
+  <g fill="#2f477c"><rect x="150" y="575" width="45" height="95" rx="20"/><rect x="355" y="600" width="48" height="110" rx="22"/><rect x="570" y="575" width="48" height="120" rx="22"/></g>
+</svg>

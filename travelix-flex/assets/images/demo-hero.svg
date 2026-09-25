@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Travelix mountain coast illustration</title><desc id="desc">A warm sunset above layered mountains and a calm sea.</desc>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#ff9fc9"/><stop offset=".42" stop-color="#f7b384"/><stop offset="1" stop-color="#6a79a8"/></linearGradient><linearGradient id="sea" x2="0" y2="1"><stop stop-color="#345b87"/><stop offset="1" stop-color="#10172d"/></linearGradient></defs>
+  <rect width="1600" height="900" fill="url(#sky)"/><circle cx="1180" cy="190" r="92" fill="#fff1ce" opacity=".88"/>
+  <path d="M0 520 270 300l195 170 210-280 260 315 220-230 445 330v295H0Z" fill="#293a65" opacity=".8"/>
+  <path d="M0 620 350 420l220 170 260-190 260 170 240-120 270 160v290H0Z" fill="#18284d"/>
+  <path d="M0 690c260-80 420 85 680 0s430-40 920 15v195H0Z" fill="url(#sea)"/>
+  <path d="M130 760c190-55 390 30 560-12s410-45 780 20" fill="none" stroke="#fff" stroke-opacity=".2" stroke-width="8"/>
+</svg>

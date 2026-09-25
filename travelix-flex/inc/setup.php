@@ -86,14 +86,52 @@ function travelix_flex_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'travelix_flex_enqueue_assets' );
 
+/**
+ * Gravity Forms function embeds need their assets queued before wp_head().
+ */
+function travelix_flex_enqueue_gravity_form_assets() {
+	if ( ! is_front_page() || 'gravity' !== travelix_flex_option( 'lead_form_source' ) || ! function_exists( 'gravity_form_enqueue_scripts' ) ) {
+		return;
+	}
+
+	$form_id = absint( travelix_flex_option( 'gravity_form_id' ) );
+	if ( $form_id ) {
+		gravity_form_enqueue_scripts( $form_id, true );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'travelix_flex_enqueue_gravity_form_assets', 5 );
+
 function travelix_flex_admin_assets( $hook ) {
 	if ( 'appearance_page_travelix-flex-settings' !== $hook ) {
 		return;
 	}
 	wp_enqueue_media();
 	wp_enqueue_style( 'wp-color-picker' );
+	$css_editor = wp_enqueue_code_editor( array( 'type' => 'text/css' ) );
+	$js_editor  = wp_enqueue_code_editor( array( 'type' => 'text/javascript' ) );
 	wp_enqueue_style( 'travelix-flex-admin', TRAVELIX_FLEX_URI . '/assets/css/admin.css', array( 'wp-color-picker' ), travelix_flex_asset_version( '/assets/css/admin.css' ) );
 	wp_enqueue_script( 'travelix-flex-admin', TRAVELIX_FLEX_URI . '/assets/js/admin.js', array( 'jquery', 'wp-color-picker' ), travelix_flex_asset_version( '/assets/js/admin.js' ), true );
+	wp_localize_script(
+		'travelix-flex-admin',
+		'travelixFlexAdmin',
+		array(
+			'codeEditor' => array(
+				'css' => $css_editor,
+				'js'  => $js_editor,
+			),
+			'assets'     => array(
+				'hero'        => TRAVELIX_FLEX_URI . '/assets/images/demo-hero.svg',
+				'about'       => TRAVELIX_FLEX_URI . '/assets/images/demo-about.svg',
+				'destination' => TRAVELIX_FLEX_URI . '/assets/images/demo-destination.svg',
+				'tour'        => TRAVELIX_FLEX_URI . '/assets/images/demo-tour.svg',
+				'cta'         => TRAVELIX_FLEX_URI . '/assets/images/demo-cta.svg',
+			),
+			'i18n'       => array(
+				'unsaved' => __( 'تغییرات ذخیره‌نشده دارید.', 'travelix-flex' ),
+				'saved'   => __( 'تغییرات ذخیره‌شده‌اند.', 'travelix-flex' ),
+			),
+		)
+	);
 }
 add_action( 'admin_enqueue_scripts', 'travelix_flex_admin_assets' );
 
@@ -101,7 +139,9 @@ add_action( 'admin_enqueue_scripts', 'travelix_flex_admin_assets' );
  * Seed defaults and copy compatible settings from the previous Travelix starter.
  */
 function travelix_flex_activate_theme() {
-	if ( get_option( 'travelix_flex_options', false ) ) {
+	$current = get_option( 'travelix_flex_options', false );
+	if ( is_array( $current ) && $current ) {
+		update_option( 'travelix_flex_db_version', TRAVELIX_FLEX_VERSION );
 		return;
 	}
 	$options = travelix_flex_defaults();
@@ -126,8 +166,28 @@ function travelix_flex_activate_theme() {
 		}
 	}
 	update_option( 'travelix_flex_options', travelix_flex_sanitize_options( $options ) );
+	update_option( 'travelix_flex_db_version', TRAVELIX_FLEX_VERSION );
 }
 add_action( 'after_switch_theme', 'travelix_flex_activate_theme' );
+
+/**
+ * Add defaults introduced by newer releases without overwriting saved choices.
+ */
+function travelix_flex_maybe_upgrade() {
+	$installed = (string) get_option( 'travelix_flex_db_version', '0.0.0' );
+	if ( ! version_compare( $installed, TRAVELIX_FLEX_VERSION, '<' ) ) {
+		return;
+	}
+
+	$current = get_option( 'travelix_flex_options', false );
+	if ( false === $current ) {
+		return;
+	}
+	$current = is_array( $current ) ? $current : array();
+	update_option( 'travelix_flex_options', wp_parse_args( $current, travelix_flex_defaults() ) );
+	update_option( 'travelix_flex_db_version', TRAVELIX_FLEX_VERSION );
+}
+add_action( 'init', 'travelix_flex_maybe_upgrade', 1 );
 
 function travelix_flex_body_classes( $classes ) {
 	$classes[] = is_rtl() ? 'travelix-is-rtl' : 'travelix-is-ltr';
@@ -139,7 +199,9 @@ function travelix_flex_body_classes( $classes ) {
 add_filter( 'body_class', 'travelix_flex_body_classes' );
 
 function travelix_flex_register_elementor_locations( $manager ) {
-	$manager->register_all_core_location();
+	if ( is_object( $manager ) && method_exists( $manager, 'register_all_core_location' ) ) {
+		$manager->register_all_core_location();
+	}
 }
 add_action( 'elementor/theme/register_locations', 'travelix_flex_register_elementor_locations' );
 

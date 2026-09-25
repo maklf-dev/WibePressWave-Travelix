@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Travel landscape illustration</title><desc id="desc">A road leading toward mountains under a bright sky.</desc>
+  <defs><linearGradient id="s" x2="0" y2="1"><stop stop-color="#9ed8ee"/><stop offset=".65" stop-color="#f5d5b7"/><stop offset="1" stop-color="#f4b68e"/></linearGradient><linearGradient id="r" x2="0" y2="1"><stop stop-color="#687087"/><stop offset="1" stop-color="#18284d"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#s)"/><circle cx="930" cy="180" r="90" fill="#fff6d9"/>
+  <path d="M0 580 245 300l180 190 180-300 260 340 130-160 205 220v410H0Z" fill="#7186a6"/>
+  <path d="M0 655 285 475l220 155 240-180 260 175 195-115v490H0Z" fill="#2f477c"/>
+  <path d="M455 1000 565 660h80l120 340Z" fill="url(#r)"/><path d="m596 960 8-76" stroke="#fff" stroke-width="10" stroke-linecap="round"/>
+  <path d="M0 760c120-50 210-45 330 0v240H0ZM1200 725c-155-40-270-15-370 50v225h370Z" fill="#5c7a52"/>
+</svg>
