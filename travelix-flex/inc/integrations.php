@@ -90,14 +90,14 @@ function travelix_flex_product_grid( $args = array() ) {
 		<article class="tour-card reveal">
 			<a class="tour-card__media" href="<?php echo esc_url( $url ); ?>">
 				<?php if ( travelix_flex_option( 'product_show_duration' ) && $duration ) : ?><span class="tour-card__badge"><?php echo esc_html( $duration ); ?></span><?php endif; ?>
-				<?php if ( $image ) : ?><img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" loading="lazy" decoding="async"><?php else : ?><span class="image-placeholder"><?php echo travelix_flex_icon( 'plane' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><?php endif; ?>
+				<?php if ( $image ) : ?><img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $product->get_name() ); ?>" loading="lazy" decoding="async"><?php else : ?><img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/demo-tour.svg' ) ); ?>" alt="" loading="lazy" decoding="async"><?php endif; ?>
 			</a>
 			<div class="tour-card__body">
 				<?php if ( $meta ) : ?><span class="card-kicker"><?php echo esc_html( $meta ); ?></span><?php endif; ?>
 				<h3><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $product->get_name() ); ?></a></h3>
 				<?php if ( travelix_flex_option( 'product_show_excerpt' ) && $summary ) : ?><p class="tour-card__route"><?php echo esc_html( $summary ); ?></p><?php endif; ?>
 				<div class="tour-card__footer">
-					<?php if ( travelix_flex_option( 'product_show_price' ) ) : ?><div class="tour-price"><strong><?php echo $product->get_price_html() ? wp_kses_post( $product->get_price_html() ) : esc_html__( 'تماس برای قیمت', 'travelix-flex' ); ?></strong><span><?php echo esc_html( travelix_flex_text( 'product_price_suffix' ) ); ?></span></div><?php endif; ?>
+				<?php if ( travelix_flex_option( 'product_show_price' ) ) : ?><div class="tour-price"><strong dir="auto"><?php echo $product->get_price_html() ? wp_kses_post( $product->get_price_html() ) : esc_html__( 'تماس برای قیمت', 'travelix-flex' ); ?></strong><span><?php echo esc_html( travelix_flex_text( 'product_price_suffix' ) ); ?></span></div><?php endif; ?>
 					<a class="round-link" href="<?php echo esc_url( $url ); ?>" aria-label="<?php echo esc_attr( travelix_flex_text( 'product_button_label' ) . ': ' . $product->get_name() ); ?>"><?php echo travelix_flex_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span class="screen-reader-text"><?php echo esc_html( travelix_flex_text( 'product_button_label' ) ); ?></span></a>
 				</div>
 			</div>
@@ -148,7 +148,7 @@ function travelix_flex_destination_grid( $limit = 5 ) {
 		$image        = $thumbnail_id ? wp_get_attachment_image_url( $thumbnail_id, 'large' ) : '';
 		?>
 		<a class="destination-card reveal" href="<?php echo esc_url( $term_link ); ?>">
-			<?php if ( $image ) : ?><img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $term->name ); ?>" loading="lazy" decoding="async"><?php else : ?><span class="image-placeholder"><?php echo travelix_flex_icon( 'map' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><?php endif; ?>
+			<?php if ( $image ) : ?><img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $term->name ); ?>" loading="lazy" decoding="async"><?php else : ?><img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/demo-destination.svg' ) ); ?>" alt="" loading="lazy" decoding="async"><?php endif; ?>
 			<span class="destination-card__overlay"></span>
 			<span class="destination-card__content"><strong><?php echo esc_html( $term->name ); ?></strong><small><?php echo esc_html( sprintf( _n( '%s سفر', '%s سفر', $term->count, 'travelix-flex' ), number_format_i18n( $term->count ) ) ); ?></small></span>
 		</a>
@@ -185,12 +185,12 @@ function travelix_flex_posts_grid( $limit = 3, $category = '' ) {
 		$categories = get_the_category();
 		?>
 		<article <?php post_class( 'blog-card reveal' ); ?>>
-			<a class="blog-card__media" href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); } else { echo '<span class="image-placeholder">' . travelix_flex_icon( 'compass' ) . '</span>'; } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+			<a class="blog-card__media" href="<?php the_permalink(); ?>"><?php if ( has_post_thumbnail() ) { the_post_thumbnail( 'large', array( 'loading' => 'lazy', 'decoding' => 'async' ) ); } else { ?><img src="<?php echo esc_url( get_theme_file_uri( '/assets/images/demo-destination.svg' ) ); ?>" alt="" loading="lazy" decoding="async"><?php } ?></a>
 			<div class="blog-card__body">
 				<?php if ( $categories ) : ?><a class="blog-card__tag" href="<?php echo esc_url( get_category_link( $categories[0] ) ); ?>"><?php echo esc_html( $categories[0]->name ); ?></a><?php endif; ?>
 				<h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
 				<?php if ( travelix_flex_option( 'blog_show_excerpt' ) ) : ?><p><?php echo esc_html( wp_trim_words( get_the_excerpt(), absint( travelix_flex_option( 'blog_excerpt_words' ) ) ) ); ?></p><?php endif; ?>
-				<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+				<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>" dir="auto"><?php echo esc_html( get_the_date() ); ?></time>
 			</div>
 		</article>
 		<?php

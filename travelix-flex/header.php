@@ -23,9 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="topbar">
 		<div class="container topbar__inner">
 			<div class="topbar__contact">
-				<?php if ( travelix_flex_option( 'phone' ) ) : ?><a href="tel:<?php echo esc_attr( travelix_flex_tel_href() ); ?>"><?php echo travelix_flex_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span><?php echo esc_html( travelix_flex_text( 'phone' ) ); ?></span></a><?php endif; ?>
-				<?php if ( travelix_flex_option( 'email' ) ) : ?><a href="mailto:<?php echo esc_attr( antispambot( travelix_flex_option( 'email' ) ) ); ?>"><?php echo travelix_flex_icon( 'mail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><span><?php echo esc_html( antispambot( travelix_flex_option( 'email' ) ) ); ?></span></a><?php endif; ?>
-				<?php if ( travelix_flex_text( 'topbar_note' ) ) : ?><span class="topbar__note"><?php echo esc_html( travelix_flex_text( 'topbar_note' ) ); ?></span><?php endif; ?>
+				<?php if ( travelix_flex_option( 'phone' ) ) : ?><a href="tel:<?php echo esc_attr( travelix_flex_tel_href() ); ?>"><?php echo travelix_flex_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><bdi dir="ltr"><?php echo esc_html( travelix_flex_text( 'phone' ) ); ?></bdi></a><?php endif; ?>
+				<?php if ( travelix_flex_option( 'email' ) ) : ?><a href="mailto:<?php echo esc_attr( antispambot( travelix_flex_option( 'email' ) ) ); ?>"><?php echo travelix_flex_icon( 'mail' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><bdi dir="ltr"><?php echo esc_html( antispambot( travelix_flex_option( 'email' ) ) ); ?></bdi></a><?php endif; ?>
+				<?php if ( travelix_flex_text( 'topbar_note' ) ) : ?><span class="topbar__note" dir="auto"><?php echo esc_html( travelix_flex_text( 'topbar_note' ) ); ?></span><?php endif; ?>
 			</div>
 			<?php travelix_flex_language_switcher(); ?>
 		</div>
@@ -51,4 +51,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="search-overlay__dialog" role="dialog" aria-modal="true" aria-labelledby="search-dialog-title"><button type="button" class="search-overlay__close" data-search-close aria-label="<?php esc_attr_e( 'بستن جستجو', 'travelix-flex' ); ?>"><?php echo travelix_flex_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></button><h2 id="search-dialog-title"><?php esc_html_e( 'دنبال چه می‌گردید؟', 'travelix-flex' ); ?></h2><?php get_search_form(); ?></div>
 	</div>
 <?php endif; ?>
-

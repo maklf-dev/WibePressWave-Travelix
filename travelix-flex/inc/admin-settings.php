@@ -223,22 +223,31 @@ function travelix_flex_render_code_center( $options ) {
 	?>
 	<div class="travelix-code-intro">
 		<h2><?php esc_html_e( 'مرکز کدهای اختصاصی صفحه اصلی', 'travelix-flex' ); ?></h2>
-		<p><?php esc_html_e( 'هر ویرایشگر با باکس همان بخش در تب «محتوای صفحه اصلی» همگام است. در خروجی سایت، همه CSSها در یک style و همه JavaScriptها در یک script تجمیع می‌شوند.', 'travelix-flex' ); ?></p>
+		<p><?php esc_html_e( 'ستون CSS و JavaScript هر بخش با باکس همان بخش در تب «محتوای صفحه اصلی» همگام است. در خروجی سایت، همه کدها به‌صورت بهینه در یک style و یک script تجمیع می‌شوند.', 'travelix-flex' ); ?></p>
 		<?php if ( ! current_user_can( 'unfiltered_html' ) ) : ?><div class="notice notice-warning inline"><p><?php esc_html_e( 'حساب شما اجازه unfiltered_html ندارد؛ برای امنیت، کدهای سفارشی ذخیره نخواهند شد.', 'travelix-flex' ); ?></p></div><?php endif; ?>
 	</div>
-	<?php $first = true; foreach ( travelix_flex_custom_code_sections() as $section_key => $section_label ) : ?>
-		<?php
-		$fields = travelix_flex_section_code_fields( $section_key, $section_label );
-		$has_code = ! empty( $options[ $section_key . '_custom_css' ] ) || ! empty( $options[ $section_key . '_custom_js' ] );
-		$is_open  = $first || $has_code;
-		?>
-		<section class="travelix-settings-card travelix-code-card<?php echo $is_open ? ' is-open' : ''; ?>" data-section="<?php echo esc_attr( $section_key ); ?>" data-tab-section="custom_code:<?php echo esc_attr( $section_key ); ?>">
-			<button class="travelix-settings-card__toggle" type="button" aria-expanded="<?php echo $is_open ? 'true' : 'false'; ?>" aria-controls="travelix-code-<?php echo esc_attr( $section_key ); ?>"><span><strong><?php echo esc_html( $section_label ); ?></strong><small><?php echo $has_code ? esc_html__( 'دارای کد ذخیره‌شده', 'travelix-flex' ) : esc_html__( 'بدون کد اختصاصی', 'travelix-flex' ); ?></small></span><span class="dashicons dashicons-arrow-down-alt2" aria-hidden="true"></span></button>
-			<div class="travelix-settings-card__body" id="travelix-code-<?php echo esc_attr( $section_key ); ?>" <?php echo $is_open ? '' : 'hidden'; ?>><div class="travelix-fields travelix-fields--code">
-				<?php foreach ( $fields as $field ) : travelix_flex_render_admin_field( $field, $options[ $field['key'] ], true ); endforeach; ?>
-			</div></div>
-		</section>
-	<?php $first = false; endforeach; ?>
+	<div class="travelix-code-center" data-code-center>
+		<?php foreach ( array( 'css' => 'CSS', 'js' => 'JavaScript' ) as $code_type => $code_label ) : ?>
+			<section class="travelix-code-column travelix-code-column--<?php echo esc_attr( $code_type ); ?>" aria-labelledby="travelix-code-<?php echo esc_attr( $code_type ); ?>-title">
+				<header class="travelix-code-column__head">
+					<span class="travelix-code-badge"><?php echo esc_html( $code_label ); ?></span>
+					<div><h3 id="travelix-code-<?php echo esc_attr( $code_type ); ?>-title"><?php echo 'css' === $code_type ? esc_html__( 'استایل‌های اختصاصی', 'travelix-flex' ) : esc_html__( 'اسکریپت‌های اختصاصی', 'travelix-flex' ); ?></h3><p><?php echo 'css' === $code_type ? esc_html__( 'قواعد ظاهری هر بخش', 'travelix-flex' ) : esc_html__( 'رفتارهای تعاملی هر بخش', 'travelix-flex' ); ?></p></div>
+				</header>
+				<div class="travelix-code-column__body">
+					<?php foreach ( travelix_flex_custom_code_sections() as $section_key => $section_label ) : ?>
+						<?php
+						$field_key = $section_key . '_custom_' . $code_type;
+						$has_code  = ! empty( $options[ $field_key ] );
+						?>
+						<div class="travelix-code-group" data-section="<?php echo esc_attr( $section_key ); ?>">
+							<div class="travelix-code-group__title"><span><?php echo esc_html( $section_label ); ?></span><?php if ( $has_code ) : ?><small><?php esc_html_e( 'دارای کد', 'travelix-flex' ); ?></small><?php endif; ?></div>
+							<textarea class="travelix-code-editor" id="travelix-mirror-<?php echo esc_attr( $field_key ); ?>" rows="10" spellcheck="false" aria-label="<?php echo esc_attr( $section_label . ' — ' . $code_label ); ?>" data-setting-key="<?php echo esc_attr( $field_key ); ?>" data-code-key="<?php echo esc_attr( $field_key ); ?>" data-code-role="mirror"><?php echo esc_textarea( $options[ $field_key ] ); ?></textarea>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</section>
+		<?php endforeach; ?>
+	</div>
 	<?php
 }
 

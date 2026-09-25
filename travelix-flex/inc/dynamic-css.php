@@ -25,11 +25,11 @@ function travelix_flex_dynamic_css() {
 	$font_key   = (string) travelix_flex_option( 'font_family' );
 	$shadow     = isset( $shadow_map[ $shadow_key ] ) ? $shadow_map[ $shadow_key ] : $shadow_map['medium'];
 	$font       = isset( $font_map[ $font_key ] ) ? $font_map[ $font_key ] : $font_map['system'];
-	$align_map = is_rtl()
-		? array( 'right' => 'flex-start', 'center' => 'center', 'left' => 'flex-end' )
-		: array( 'right' => 'flex-end', 'center' => 'center', 'left' => 'flex-start' );
+	$align_map = array( 'right' => 'flex-start', 'center' => 'center', 'left' => 'flex-end' );
+	$text_align_map = array( 'right' => 'start', 'center' => 'center', 'left' => 'end' );
 	$hero_align            = (string) travelix_flex_option( 'hero_align' );
 	$hero_action_alignment = isset( $align_map[ $hero_align ] ) ? $align_map[ $hero_align ] : $align_map['right'];
+	$hero_text_alignment   = isset( $text_align_map[ $hero_align ] ) ? $text_align_map[ $hero_align ] : $text_align_map['right'];
 
 	$css = ':root{'
 		. '--tx-primary:' . travelix_flex_option( 'color_primary' ) . ';'
@@ -70,7 +70,7 @@ function travelix_flex_dynamic_css() {
 		. '.site-header{background:' . travelix_flex_option( 'header_background' ) . '}'
 		. '.site-header.is-sticky{position:sticky;top:0}'
 		. '.topbar{background:' . travelix_flex_option( 'topbar_background' ) . '}'
-		. '.hero{--hero-image:url("' . esc_url_raw( travelix_flex_option( 'hero_image' ) ) . '");--hero-overlay:' . ( absint( travelix_flex_option( 'hero_overlay' ) ) / 100 ) . ';text-align:' . travelix_flex_option( 'hero_align' ) . '}'
+		. '.hero{--hero-image:url("' . esc_url_raw( travelix_flex_option( 'hero_image' ) ) . '");--hero-overlay:' . ( absint( travelix_flex_option( 'hero_overlay' ) ) / 100 ) . ';text-align:' . $hero_text_alignment . '}'
 		. '.hero__actions{justify-content:' . $hero_action_alignment . '}'
 		. '.lead-panel{background:' . travelix_flex_option( 'lead_form_background' ) . ';border-radius:' . absint( travelix_flex_option( 'lead_form_radius' ) ) . 'px}'
 		. '.trust{background:' . travelix_flex_option( 'trust_background' ) . ';padding-block:' . absint( travelix_flex_option( 'trust_padding' ) ) . 'px}'

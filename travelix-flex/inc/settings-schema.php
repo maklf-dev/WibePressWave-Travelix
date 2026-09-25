@@ -31,9 +31,9 @@ function travelix_flex_settings_schema() {
 	);
 
 	$alignments = array(
-		'right'  => __( 'راست', 'travelix-flex' ),
+		'right'  => __( 'ابتدای جهت زبان (راست در فارسی)', 'travelix-flex' ),
 		'center' => __( 'وسط', 'travelix-flex' ),
-		'left'   => __( 'چپ', 'travelix-flex' ),
+		'left'   => __( 'انتهای جهت زبان (چپ در فارسی)', 'travelix-flex' ),
 	);
 
 	$schema = array(

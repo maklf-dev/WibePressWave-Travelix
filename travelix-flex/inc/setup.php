@@ -81,6 +81,7 @@ function travelix_flex_enqueue_assets() {
 		array(
 			'menuOpen'  => __( 'بازکردن منو', 'travelix-flex' ),
 			'menuClose' => __( 'بستن منو', 'travelix-flex' ),
+			'slideLabel' => __( 'نمایش نظر %d', 'travelix-flex' ),
 		)
 	);
 }

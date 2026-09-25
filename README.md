@@ -10,22 +10,29 @@ Travelix is designed for travel agencies, tour operators, tourism businesses, an
 
 ## 🚀 Current Release
 
-**Travelix Flex 3.1.0**
+**Travelix Flex 3.2.0**
 
-Travelix Flex 3.1.0 is a backward-compatible feature release based on 3.0.0. It expands the theme settings experience, introduces per-section custom code, improves live previews, and includes several stability and compatibility improvements.
+Travelix Flex 3.2.0 is a backward-compatible feature and refinement release based on 3.1.0.
+
+This version focuses on:
+
+- Public-facing layout improvements
+- Better responsive behavior
+- Improved RTL/LTR handling
+- Accessibility refinements
+- Blog archive and single-post redesign
+- Safer mobile navigation and search interactions
+- Admin settings UX improvements
+- Continued support for section-level custom CSS and JavaScript
 
 ### ⬇️ Download the Latest Release
 
-[![Download Travelix Flex](https://img.shields.io/badge/Download-Latest%20Travelix%20Flex-2ea44f?style=for-the-badge&logo=wordpress&logoColor=white)](https://github.com/YOUR_USERNAME/WibePressWave-Travelix/releases/latest)
+[![Download Travelix Flex](https://img.shields.io/badge/Download-Latest%20Travelix%20Flex-2ea44f?style=for-the-badge&logo=wordpress&logoColor=white)](https://github.com/maklf-dev/WibePressWave-Travelix/releases/latest)
 
-> Replace `YOUR_USERNAME` with your actual GitHub username.
-
-The latest GitHub Release should contain the installable WordPress theme ZIP.
-
-For version 3.1.0, the installable package is:
+For version 3.2.0, the installable package is:
 
 ```text
-travelix-flex-3.1.0.zip
+travelix-flex-3.2.0.zip
 ```
 
 ---
@@ -42,7 +49,9 @@ The project focuses on:
 - WooCommerce-based tour products
 - Booking and reservation integrations
 - Multilingual support
-- Responsive layouts
+- RTL and LTR layouts
+- Responsive design
+- Accessible interactions
 - A configurable homepage
 - A dedicated visual settings experience
 - Per-section custom CSS and JavaScript
@@ -54,134 +63,209 @@ Instead of allowing every plugin to bring its own unrelated visual personality t
 
 ---
 
-# ✨ What's New in 3.1.0
+# ✨ What's New in 3.2.0
 
-## 🎛️ Improved Settings Experience
+## 🎨 Frontend Visual Refinements
 
-All internal settings groups are now organized as collapsible accordions.
+Travelix 3.2.0 includes a broad visual pass across the public-facing theme.
 
-This makes large configuration tabs easier to navigate while keeping related controls grouped together.
+The homepage has been rebalanced across multiple viewport sizes, including:
 
-The accordion interface also includes accessibility state handling rather than simply hiding things and hoping for the best.
+- 1440px
+- 1024px
+- 768px
+- 720px
+- 520px
+- Smaller mobile widths
 
----
+Improvements include:
 
-## 👁️ Sticky Live Previews
+- Better hero heading scale
+- Controlled text line width
+- Fluid container spacing
+- More consistent card heights
+- Better alignment for prices, dates, and buttons
+- Improved section spacing
+- Better touch targets
+- Improved keyboard focus states
+- Better pressed-button feedback
 
-Every settings group now includes a dedicated live preview.
-
-Preview examples are available for areas such as:
-
-- Header
-- Hero
-- Travel request form
-- Benefits
-- Destinations
-- About section
-- Process steps
-- Booking section
-- Tour cards
-- Testimonials
-- Blog cards
-- CTA
-- General cards
-- Responsive settings
-- Footer
-- Future/internal pages
-
-The previews remain visible while editing supported settings, making visual adjustments considerably easier.
+The result is a more stable layout across desktop, tablet, and mobile instead of relying on the ancient frontend ritual of “looks fine on my screen.” 😌
 
 ---
 
-## 💻 Per-Section Custom CSS & JavaScript
+## 🖼️ Local Fallback Images
 
-Travelix Flex 3.1.0 introduces dedicated **CSS and JavaScript editors for each of the 11 homepage sections**.
+When a post, destination, or WooCommerce product does not have a featured image, Travelix now uses lightweight local SVG assets bundled with the theme.
 
-This allows custom behavior and styling to stay logically attached to the section it belongs to.
+This improves consistency and avoids awkward empty-card layouts.
 
-For example:
+---
 
-```text
-Hero
-├── Custom CSS
-└── Custom JavaScript
+# 📝 Blog Archive Improvements
 
-Travel Request Form
-├── Custom CSS
-└── Custom JavaScript
+The blog archive layout has been refined for small post counts.
 
-Tours
-├── Custom CSS
-└── Custom JavaScript
+### One-post archive
+
+A single post card is centered instead of leaving an unbalanced empty grid.
+
+### Two-post archive
+
+Two posts use a controlled centered layout rather than stretching awkwardly across the page.
+
+Additional improvements include:
+
+- Better image alignment
+- Better excerpt alignment
+- Consistent date placement
+- Consistent “read more” positioning
+- Improved pagination
+- Improved focus states
+- Refined image hover behavior
+
+---
+
+# 📖 Single Post & Comments
+
+Single-post pages received a full readability pass.
+
+Improvements include:
+
+- Better reading width
+- Improved line height
+- Better paragraph spacing
+- Refined heading hierarchy
+- Better blockquote styling
+- Improved list spacing
+- Better featured image presentation
+- Semantic date and category metadata
+- Designed tag output
+- Previous/next post navigation
+- Redesigned comment cards
+- Improved comment avatars
+- Better comment metadata
+- Improved reply controls
+- Redesigned comment form
+- Better mobile behavior
+
+This version treats the blog like actual content rather than the place a theme remembers at the end of development. 🙂
+
+---
+
+# 🌐 RTL, LTR & WPML Improvements
+
+Travelix 3.2.0 improves bidirectional language support throughout the theme.
+
+### Direction-aware hero alignment
+
+The default hero alignment now follows the beginning of the current writing direction:
+
+- Right in RTL languages
+- Left in LTR languages
+
+### Direction-aware controls
+
+Directional elements now adapt correctly between RTL and LTR, including:
+
+- Read-more arrows
+- Card buttons
+- CTA elements
+- Slider controls
+
+### Safer mixed-direction content
+
+Phone numbers, email addresses, prices, and dates are isolated from surrounding text using appropriate bidirectional handling such as:
+
+- `bdi`
+- `dir`
+- `unicode-bidi`
+
+This reduces number and punctuation ordering issues in RTL content.
+
+### Logical CSS properties
+
+More positioning and spacing rules now use logical CSS properties such as:
+
+```css
+margin-inline
+inset-inline
 ```
 
-The same pattern is available across all supported homepage sections.
+This makes the same layout system work more naturally across both RTL and LTR languages.
 
-No more maintaining one mysterious 900-line global CSS block and pretending everyone remembers why line 647 exists. 😌
-
----
-
-## 🧩 Central Custom Code Tab
-
-A dedicated **Custom Code** tab provides categorized editors containing the same section-specific CSS and JavaScript.
-
-The section editor and the central editor remain synchronized.
-
-This means custom code can be edited either:
-
-- Directly inside a homepage section
-- From the centralized Custom Code tab
-
-Both interfaces work with the same stored data.
+WPML and the Travelix text domain continue to handle translatable theme strings.
 
 ---
 
-## ⚙️ Optimized Custom Code Output
+# 🧭 Header, Mobile Menu & Search
 
-Section-level code is not printed as dozens of separate frontend blocks.
+## Sticky Header
 
-Travelix combines:
+The sticky header now works correctly with the WordPress admin bar.
 
-- All section CSS into a single inline style output
-- All section JavaScript into a single inline script output
+## Mobile Menu
 
-This keeps the feature organized in the admin interface without unnecessarily fragmenting frontend output.
+The mobile menu now closes when:
 
----
+- Clicking outside the menu
+- Pressing `Escape`
+- Resizing the browser window
 
-## 📝 WordPress CodeMirror Integration
+The accessible label for the menu button also updates based on whether the menu is open or closed.
 
-When the WordPress user account has the built-in code editor enabled, Travelix uses WordPress's bundled **CodeMirror** integration for custom CSS and JavaScript editing.
+## Search Dialog
 
-This provides a better code editing experience while avoiding an unnecessary external editor dependency.
+The search dialog now includes improved focus management:
 
----
+- Keyboard focus remains trapped inside the dialog while it is open
+- Focus returns to the previously active control after closing
 
-## 💾 Unsaved Changes Indicator
-
-The Travelix settings interface now displays an unsaved-changes state in the save bar.
-
-This makes it easier to know whether changes have actually been saved before navigating away.
-
-A tiny feature, perhaps, but so is the save button until you forget to press it. 🙂
+These are small interaction details until keyboard navigation breaks. Then suddenly they are not small at all.
 
 ---
 
-## 🖼️ Local Demo Assets
+# 🎛️ Travelix Settings Improvements
 
-Travelix 3.1.0 includes lightweight local SVG assets used for raw/default presentation previews.
+Travelix 3.2.0 further refines the settings experience introduced in 3.1.0.
 
-Included demo assets:
+## Single-open accordion behavior
 
-```text
-assets/images/demo-hero.svg
-assets/images/demo-about.svg
-assets/images/demo-destination.svg
-assets/images/demo-tour.svg
-assets/images/demo-cta.svg
-```
+Within each settings tab, only one accordion group can remain open at a time.
 
-These assets avoid a default dependency on external image services.
+Opening a new settings group automatically closes the previous one.
+
+This keeps large settings pages easier to scan and reduces visual clutter.
+
+## Custom Code tab redesign
+
+The **Custom Code** tab no longer uses accordions.
+
+Instead, it uses two equal independent columns:
+
+- CSS
+- JavaScript
+
+Sections are separated using compact headings and subtle dividers while preserving a unified editor layout.
+
+## Two-way code synchronization
+
+The editors in the Custom Code tab remain synchronized with each section's CSS and JavaScript fields in the homepage settings.
+
+Code can therefore be edited from either location without creating separate copies.
+
+## Consolidated frontend output
+
+Travelix still combines:
+
+- All section CSS into one style output
+- All section JavaScript into one script output
+
+## Safer admin preview behavior
+
+Custom JavaScript does **not** execute inside the admin preview environment.
+
+This prevents custom frontend scripts from interfering with the WordPress admin interface.
 
 ---
 
@@ -201,38 +285,7 @@ The homepage supports 11 configurable sections:
 10. Travel articles
 11. Final CTA
 
-These sections can be configured through Travelix Settings instead of requiring direct PHP template edits.
-
-Version 3.1.0 also gives each section its own custom CSS and JavaScript controls.
-
----
-
-# 🎛️ Travelix Settings
-
-The theme includes a dedicated configuration area under:
-
-**Appearance → Travelix Settings**
-
-Settings are grouped into categories covering areas such as:
-
-- Global design
-- Header and navigation
-- Homepage content
-- Cards
-- Forms
-- Plugin integrations
-- Responsive behavior
-- Footer
-- Internal/future pages
-- Custom CSS and JavaScript
-
-Version 3.1.0 adds:
-
-- Accordion-based setting groups
-- Sticky live previews
-- Unsaved-change indicators
-- Section-specific code editors
-- A synchronized centralized Custom Code tab
+Each section can be configured through Travelix Settings and can use its own custom CSS and JavaScript.
 
 ---
 
@@ -252,11 +305,11 @@ Travelix can use WooCommerce data such as:
 - Product archive links
 - Product detail links
 
-This means tour data stays inside WooCommerce while Travelix renders it using the theme's own cards and layouts.
+This keeps business data in WooCommerce while Travelix controls the visual presentation.
 
 ## Catalog Mode
 
-Travelix also supports a catalog-oriented workflow where WooCommerce can be used to manage structured tour data without forcing the website to behave like a traditional online shop.
+Travelix supports a catalog-oriented workflow where WooCommerce can manage structured tour data without requiring the site to behave like a traditional online shop.
 
 ---
 
@@ -271,25 +324,7 @@ A destination card may use:
 - Number of available tours
 - Category archive URL
 
-This avoids maintaining the same destination information in multiple places.
-
----
-
-# 📝 WordPress Blog Integration
-
-Travel articles use standard WordPress posts.
-
-WordPress remains responsible for:
-
-- Posts
-- Categories
-- Authors
-- Dates
-- Archives
-- Search
-- Single article pages
-
-Travelix handles the visual presentation.
+If an image is missing, Travelix can use a bundled fallback visual.
 
 ---
 
@@ -303,15 +338,7 @@ Travelix is designed to work with form plugins such as:
 
 Forms remain responsible for validation, submissions, notifications, and stored data.
 
-Travelix provides the surrounding visual system.
-
-### Gravity Forms improvements in 3.1.0
-
-Travelix 3.1.0 improves Gravity Forms integration by correctly enqueueing the required assets for supported functionality such as:
-
-- AJAX forms
-- Date fields
-- Conditional logic
+Travelix provides the surrounding design system.
 
 ---
 
@@ -345,77 +372,36 @@ The theme can work with:
 - Multilingual menus
 - Multilingual categories
 
+Version 3.2.0 further improves RTL/LTR direction handling across public-facing components.
+
 ---
 
 # 🧱 Elementor Compatibility
 
 Travelix includes compatibility for Elementor-based content areas and theme locations where supported.
 
-Version 3.1.0 also adds safer handling around Elementor theme-location registration.
+---
+
+# 💻 Per-Section Custom CSS & JavaScript
+
+Travelix provides dedicated CSS and JavaScript controls for each of the 11 homepage sections.
+
+The same code can be edited from:
+
+- The corresponding homepage section
+- The centralized Custom Code tab
+
+Both interfaces remain synchronized.
+
+Custom CSS and JavaScript are stored as part of the theme settings and emitted in consolidated frontend outputs.
 
 ---
 
-# 🎨 Design System
+# 📝 WordPress CodeMirror Integration
 
-The theme is built around a unified visual system for:
+When WordPress's built-in code editor is enabled for the current user, Travelix uses WordPress's bundled CodeMirror integration for custom CSS and JavaScript editing.
 
-- Colors
-- Typography
-- Spacing
-- Containers
-- Border radius
-- Buttons
-- Cards
-- Forms
-- Homepage sections
-- Hero layouts
-- Product cards
-- Destination cards
-- Blog cards
-- Testimonials
-- CTA sections
-- Footer
-- Responsive behavior
-
-Dynamic CSS also includes safer fallback handling for invalid or legacy design-option values.
-
-The goal is not merely to "style WordPress".
-
-The goal is to make WordPress behave like one properly designed product instead of twelve plugins wearing different jackets.
-
----
-
-# 📱 Responsive Design
-
-Travelix is designed for:
-
-- Desktop
-- Tablet
-- Mobile
-
-Responsive behavior includes adjustments for:
-
-- Layout spacing
-- Hero sizing
-- Typography
-- Card layouts
-- Navigation
-- Images
-- Section spacing
-- Reduced-motion preferences
-
----
-
-# ♿ Frontend Interaction
-
-The theme includes frontend behavior for features such as:
-
-- Responsive navigation
-- Search interface
-- Reveal animations
-- Testimonial controls
-- Reduced-motion support
-- Keyboard-friendly interactive elements where applicable
+No unnecessary external editor dependency is required.
 
 ---
 
@@ -429,40 +415,69 @@ Travelix follows standard WordPress security practices, including:
 - Input sanitization
 - Context-aware output escaping
 - Controlled shortcode handling
+- Safe handling of custom CSS and JavaScript
 - WordPress and WooCommerce APIs instead of custom raw SQL where possible
 
-Version 3.1.0 additionally includes:
+Custom CSS and JavaScript saving is restricted to users with the required `unfiltered_html` capability.
 
-- Custom CSS/JS saving restricted to users with the `unfiltered_html` capability
-- Automatic removal of `<style>` wrappers from stored CSS
-- Automatic removal of `<script>` wrappers from stored JavaScript
-- A fix for a frontend activation issue involving `add_settings_error()`
-- Safer Elementor location registration
-- Safer fallback behavior for legacy or invalid design settings
+Stored custom code is also normalized by stripping unnecessary `<style>` and `<script>` wrappers.
 
-The theme does **not** attempt to replace payment, booking, customer, or form plugins.
-
-Sensitive business data remains managed by the relevant WordPress plugin.
+Custom JavaScript is intentionally not executed inside admin previews.
 
 ---
 
-# 🔄 Upgrade Compatibility
+# ✅ Compatibility & Testing
 
-Travelix Flex 3.1.0 preserves settings from version 3.0.0 during a direct upgrade.
+Travelix Flex 3.2.0 has been tested as a direct upgrade from **3.1.0**.
 
-Existing settings remain in place, while newly introduced options are added with their defaults.
+The upgrade preserves:
 
-## Upgrading from 3.0.0 to 3.1.0
+- Existing settings
+- Colors
+- Contact information
+- Custom CSS
+- Custom JavaScript
 
-1. Back up the site's database and current configuration.
-2. Download `travelix-flex-3.1.0.zip`.
+The release has also been tested with:
+
+- PHP 7.4
+- PHP 8.4
+
+Validation and checks include:
+
+- Fresh installation
+- Direct upgrade
+- Custom code sanitization
+- Consolidated CSS/JS output
+- Settings-panel rendering
+- Editor synchronization
+- PHP structure
+- JavaScript
+- JSON
+- Image paths
+- ZIP package structure
+
+---
+
+# 🔄 Upgrading from 3.1.0 to 3.2.0
+
+1. Back up the WordPress files and database.
+2. Download `travelix-flex-3.2.0.zip`.
 3. In WordPress go to:
    **Appearance → Themes → Add New → Upload Theme**
 4. Upload the new ZIP.
-5. Because the theme folder remains `travelix-flex`, choose the option to replace the existing theme.
-6. Clear WordPress, plugin, hosting, browser, and CDN caches as applicable.
-7. Open **Appearance → Travelix Settings**.
-8. Verify existing settings and review the new 3.1.0 controls.
+5. Confirm replacement of the existing Travelix Flex theme.
+6. Clear optimization-plugin caches.
+7. Clear server/CDN caches.
+8. Clear browser cache.
+9. Check the homepage on desktop and mobile.
+10. Check the blog archive.
+11. Open a single post and verify comments.
+12. Test plugin forms and important interactive elements.
+
+The theme folder and identifier remain unchanged, so the new package can replace version 3.1.0 directly.
+
+> `travelix-flex-3.2.0-changed-files.zip` is intended only for manual review or manual file replacement. For normal upgrades, use the full `travelix-flex-3.2.0.zip` package.
 
 ---
 
@@ -482,7 +497,7 @@ Existing settings remain in place, while newly introduced options are added with
 | Visual Presentation | Travelix |
 | Section Custom CSS/JS | Travelix Settings |
 
-This separation allows the design to evolve without tying critical business data directly to presentation code.
+This separation allows the design to evolve without tying business-critical data directly to presentation code.
 
 ---
 
@@ -497,25 +512,19 @@ WibePressWave-Travelix/
 ├── travelix-flex/
 │   ├── assets/
 │   │   ├── css/
+│   │   │   ├── main.css
+│   │   │   └── admin.css
 │   │   ├── images/
-│   │   │   ├── demo-hero.svg
-│   │   │   ├── demo-about.svg
-│   │   │   ├── demo-destination.svg
-│   │   │   ├── demo-tour.svg
-│   │   │   └── demo-cta.svg
 │   │   └── js/
+│   │       ├── main.js
+│   │       └── admin.js
 │   ├── inc/
-│   │   ├── admin-settings.php
-│   │   ├── custom-code.php
-│   │   ├── dynamic-css.php
-│   │   ├── settings-schema.php
-│   │   ├── setup.php
-│   │   └── ...
 │   ├── template-parts/
-│   ├── functions.php
+│   ├── archive.php
+│   ├── single.php
 │   ├── header.php
 │   ├── footer.php
-│   ├── front-page.php
+│   ├── functions.php
 │   ├── style.css
 │   ├── theme.json
 │   └── ...
@@ -523,6 +532,7 @@ WibePressWave-Travelix/
 │   ├── INSTALLATION-FA.md
 │   ├── TAKEOFF-SUMMARY-FA.md
 │   ├── Travelix-Flex-3.1.0-Changes-FA.md
+│   ├── Travelix-Flex-3.2.0-Changes-FA.md
 │   └── ...
 ├── .gitignore
 └── README.md
@@ -530,29 +540,29 @@ WibePressWave-Travelix/
 
 ---
 
-# 🆕 Important 3.1.0 Source Changes
+# 🆕 Important 3.2.0 Source Changes
 
-Version 3.1.0 updates or introduces the following key files:
+Version 3.2.0 updates the following key files:
 
 ```text
 style.css
 functions.php
 readme.txt
+header.php
+footer.php
+archive.php
+single.php
+template-parts/content-card.php
 inc/admin-settings.php
+inc/dynamic-css.php
+inc/integrations.php
 inc/settings-schema.php
 inc/setup.php
-inc/dynamic-css.php
-inc/custom-code.php
+assets/css/main.css
 assets/css/admin.css
+assets/js/main.js
 assets/js/admin.js
-assets/images/demo-hero.svg
-assets/images/demo-about.svg
-assets/images/demo-destination.svg
-assets/images/demo-tour.svg
-assets/images/demo-cta.svg
 ```
-
-`inc/custom-code.php` and the five demo SVG files are new in this release.
 
 ---
 
@@ -565,12 +575,12 @@ The repository contains:
 - Git history
 - Development changes
 
-GitHub Releases contain the installable WordPress packages.
+GitHub Releases contain installable WordPress packages.
 
-For Travelix Flex 3.1.0:
+For Travelix Flex 3.2.0:
 
 ```text
-travelix-flex-3.1.0.zip
+travelix-flex-3.2.0.zip
 ```
 
 Do not upload the entire repository ZIP through the WordPress theme installer.
@@ -584,7 +594,7 @@ Use the dedicated installable theme package.
 1. Download the latest Travelix Flex ZIP from GitHub Releases.
 2. In WordPress go to:
    **Appearance → Themes → Add New → Upload Theme**
-3. Upload the Travelix theme ZIP.
+3. Upload `travelix-flex-3.2.0.zip`.
 4. Install and activate the theme.
 5. Open **Appearance → Travelix Settings**.
 6. Configure the required sections and integrations.
@@ -599,26 +609,26 @@ Use the dedicated installable theme package.
 Before using Travelix on a live website:
 
 - Test on staging first
-- Verify PHP and WordPress compatibility
 - Back up before upgrades
+- Verify PHP and WordPress compatibility
+- Test homepage layouts at multiple widths
 - Test WooCommerce products
-- Test sale and variable products
 - Test forms and notifications
-- Test Gravity Forms AJAX behavior
-- Test date fields and conditional logic
 - Test booking flow
 - Test multilingual pages
-- Test menus
-- Test search
+- Test RTL and LTR layouts
+- Test the blog archive with one, two, and several posts
+- Test single posts and comments
+- Test previous/next post navigation
+- Test mobile menu behavior
+- Test search focus behavior
+- Test keyboard navigation
+- Test touch targets
 - Test custom CSS/JS output
-- Test live previews
-- Test responsive layouts
-- Test user permissions for custom code
+- Test settings synchronization
 - Test accessibility
 - Test performance
 - Clear all caches before final verification
-
-Because nothing says "production ready" like discovering a mobile overflow five minutes after launch. 😌
 
 ---
 
@@ -628,8 +638,8 @@ Travelix releases follow semantic-style versioning:
 
 ```text
 v3.0.0
-v3.0.1
 v3.1.0
+v3.2.0
 v4.0.0
 ```
 
@@ -638,7 +648,7 @@ The GitHub Release version should match the version declared inside the theme's 
 Current version:
 
 ```css
-Version: 3.1.0
+Version: 3.2.0
 ```
 
 For each release:
@@ -649,7 +659,7 @@ For each release:
 4. Push to GitHub.
 5. Create a matching Git tag.
 6. Create a GitHub Release.
-7. Attach the installable theme ZIP.
+7. Attach the full installable theme ZIP.
 8. Mark the release as latest when appropriate.
 
 ---
@@ -663,6 +673,9 @@ Travelix continues to evolve across:
 - Theme architecture
 - Plugin integrations
 - Admin UX
+- Public-facing layouts
+- Accessibility
+- RTL/LTR support
 - UI components
 - Theme settings
 - Custom code tooling

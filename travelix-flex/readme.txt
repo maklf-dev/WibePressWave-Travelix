@@ -2,7 +2,7 @@
 Contributors: travelix
 Requires at least: 6.4
 Requires PHP: 7.4
-Stable tag: 3.1.0
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,16 @@ All stored options are sanitized by field type. Front-end values are escaped for
 Custom CSS and JavaScript can only be saved by trusted users with the unfiltered_html capability. Wrapper style/script tags are removed before storage.
 
 == Changelog ==
+
+= 3.2.0 =
+* Refined the complete public-facing visual system for Persian typography, spacing and hierarchy.
+* Added direction-aware hero alignment, forward arrows, slider controls and isolated mixed-direction numbers.
+* Improved responsive behavior across desktop, tablet, compact tablet and mobile widths.
+* Improved archive layouts for one or two posts and added polished bundled fallback artwork.
+* Improved single-post readability, comments, navigation, pagination and form styling.
+* Added stronger focus states, touch targets, search focus trapping and mobile-menu behavior.
+* Changed settings accordions so only one group remains open in each tab.
+* Rebuilt the custom-code tab as two synchronized CSS and JavaScript columns without accordions.
 
 = 3.1.0 =
 * Added collapsible settings groups with accessible state controls.

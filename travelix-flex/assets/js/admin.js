@@ -87,7 +87,8 @@
         case "hero":
           var heroImage = safeUrl(value("hero_image"), assets.hero);
           var overlay = safeNumber(value("hero_overlay", 72), 72, 0, 95) / 100;
-          var align = ["right", "center", "left"].indexOf(value("hero_align")) > -1 ? value("hero_align") : "right";
+          var selectedAlign = ["right", "center", "left"].indexOf(value("hero_align")) > -1 ? value("hero_align") : "right";
+          var align = selectedAlign === "right" ? "start" : (selectedAlign === "left" ? "end" : "center");
           html = disabledBadge("hero") + '<div class="txp-hero" style="background-image:linear-gradient(rgba(16,23,45,' + overlay + '),rgba(16,23,45,' + overlay + ')),url(&quot;' + escapeHTML(heroImage) + '&quot;);text-align:' + align + '"><small>' + escapeHTML(value("hero_eyebrow", "دنیا را کشف کنید")) + '</small><h2 style="font-size:' + Math.min(40, safeNumber(value("hero_title_size", 72), 72, 36, 120) * 0.48) + 'px">' + escapeHTML(value("hero_title", "ماجراجویی بعدی شما")) + '<em>' + escapeHTML(value("hero_title_second", "از اینجا شروع می‌شود")) + '</em></h2><p>' + escapeHTML(value("hero_copy", "سفری متناسب با شما")) + '</p><div><button>' + escapeHTML(value("hero_primary_label", "مشاهده سفرها")) + '</button><button class="ghost">' + escapeHTML(value("hero_secondary_label", "مشاوره")) + "</button></div></div>";
           break;
         case "lead_form":
@@ -179,6 +180,14 @@
       $(".travelix-panel").removeClass("is-active");
       $panel.addClass("is-active");
       refreshEditors($panel);
+      if (tab === "custom_code") {
+        activeSection = "custom_code";
+        activeTitle = "کدهای اختصاصی";
+        $("[data-preview-title]").text(activeTitle);
+        $("[data-preview-stage]").html('<div class="txp-code-preview"><span>&lt;/&gt;</span><h3>CSS و JavaScript بخش‌ها</h3><p>ویرایشگرهای دو ستون به‌صورت زنده با فیلدهای هر بخش همگام می‌شوند. برای امنیت، JavaScript فقط در خروجی سایت اجرا خواهد شد.</p></div>');
+        try { window.localStorage.setItem("travelixFlexTab", tab); } catch (error) {}
+        return;
+      }
       var $activeCard = $panel.find(".travelix-settings-card.is-previewing").first();
       if (!$activeCard.length) $activeCard = $panel.find(".travelix-settings-card.is-open").first();
       if (!$activeCard.length) $activeCard = $panel.find(".travelix-settings-card").first();
@@ -192,6 +201,16 @@
       var $button = $(this);
       var $card = $button.closest(".travelix-settings-card");
       var opening = !$card.hasClass("is-open");
+
+      if (opening) {
+        $card.closest(".travelix-panel").find(".travelix-settings-card.is-open").not($card).each(function () {
+          var $other = $(this);
+          $other.removeClass("is-open");
+          $other.find(".travelix-settings-card__toggle").first().attr("aria-expanded", "false");
+          $other.find(".travelix-settings-card__body").first().prop("hidden", true);
+        });
+      }
+
       $card.toggleClass("is-open", opening);
       $button.attr("aria-expanded", opening ? "true" : "false");
       $card.find(".travelix-settings-card__body").first().prop("hidden", !opening);
