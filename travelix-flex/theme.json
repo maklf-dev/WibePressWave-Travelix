@@ -1,0 +1,40 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 2,
+  "settings": {
+    "appearanceTools": true,
+    "layout": {
+      "contentSize": "820px",
+      "wideSize": "1240px"
+    },
+    "color": {
+      "palette": [
+        { "slug": "travelix-primary", "name": "Travelix Primary", "color": "#18284d" },
+        { "slug": "travelix-secondary", "name": "Travelix Secondary", "color": "#2f477c" },
+        { "slug": "travelix-accent", "name": "Travelix Accent", "color": "#e62d86" },
+        { "slug": "travelix-surface", "name": "Travelix Surface", "color": "#f7f8fc" },
+        { "slug": "travelix-dark", "name": "Travelix Dark", "color": "#10172d" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "fontFamilies": [
+        { "slug": "travelix", "name": "Travelix Persian", "fontFamily": "Vazirmatn, Tahoma, Arial, sans-serif" }
+      ]
+    },
+    "spacing": {
+      "units": ["px", "rem", "%", "vw"]
+    }
+  },
+  "styles": {
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--travelix)",
+      "lineHeight": "1.75"
+    },
+    "elements": {
+      "link": {
+        "color": { "text": "var(--wp--preset--color--travelix-accent)" }
+      }
+    }
+  }
+}
